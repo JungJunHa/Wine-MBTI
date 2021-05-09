@@ -3,3 +3,5 @@ My team made a simple personality Test. You'll know what kind of wine fits you. 
 
 # ScreenShots
 ![MainPage](Screenshots/Mainpage.jpg)
+![TestPage](Screenshots/Testpage.jpg)
+![Result](Screenshots/Result.jpg)
