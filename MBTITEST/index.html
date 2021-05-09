@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>와인 포도 테스트</title>
+        <meta
+            name="description"
+            content="나와 가장 잘 어울리는 와인 포도 품종을 MBTI를 기반으로 추천해주는 테스트입니다.">
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="와인 포도 테스트">
+        <meta
+            property="og:description"
+            content="나와 가장 잘 어울리는 와인 포도 품종을 MBTI를 기반으로 추천해주는 테스트입니다.">
+        <meta property="og:image" content="http://www.mysite.com/myimage.jpg">
+        <meta
+            property="og:url"
+            content="https://testwinegrapes.netlify.app/home_grape.png">
+        <link rel="stylesheet" href="bootstrap.min.css">
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body class="container">
+
+        <article class="start">
+            <img class="h_img1" src="images/h_img1.svg" alt="h_img1">
+            <img class="h_img2" src="images/h_img2.svg" alt="h_img2">
+            <h1 class="h_title text-center">당신과 잘 어울리는 와인 포도는?</h1>
+
+            <button type="button" class="btn btn1 btn-primary" onclick='start();'>시작하기</button>
+        </article>
+
+        <article class="question">
+            <img class="h_img1" src="images/home_grape.svg" alt="home_grape">
+            <button id="title" type="button" class="btn btn_q btn-outline-primary">문제</button>
+            <!-- <h2 id="title" class="text-center mt-5 none">문제</h2> -->
+            <!-- 어떤 문제인지 알아야 하기 때문에 -->
+            <input id="type" type="hidden" value="EI">
+            <button id="A" type="button" class="btn btn2 btn-outline-primary ">1번답변</button>
+            <button id="B" type="button" class="btn btn2 btn-outline-primary ">2번답변</button>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width:calc(100/12*1%)"></div>
+            </div>
+            <button id="Back" type="button" class="btn btn2 btn-outline-primary ">뒤로</button>
+
+        </article>
+
+        <article class="result">
+            <img id="img" class="rimg" src="loading.svg" alt="">
+            <h2 id="grape" class="text-center none">동물이름</h2>
+            <h3 id="explain" class="text-center none">설명</h3>
+            <h6 class="text-center sns">🍷친구에게 공유하기🍷</h6>
+
+            <!-- Go to www.addthis.com/dashboard to customize your tools -->
+            <div class="share addthis_inline_share_toolbox"></div>
+
+        </article>
+        <article class="kakao_ad mt-5">
+            <ins
+                class="kakao_ad_area"
+                style="display:none;"
+                data-ad-unit="DAN-YUpSHMVsGl37cV8V"
+                data-ad-width="320"
+                data-ad-height="100"></ins>
+        </article>
+
+        <script
+            type="text/javascript"
+            src="//t1.daumcdn.net/kas/static/ba.min.js"
+            async="async"></script>
+
+        <input type="hidden" id="EI" value="0">
+        <input type="hidden" id="SN" value="0">
+        <input type="hidden" id="TF" value="0">
+        <input type="hidden" id="JP" value="0">
+
+        <script
+            src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+            crossorigin="anonymous"></script>
+        <script>
+            var num = 1;
+            var history = '';
+            // var jsobject = {key:value} jsobject[key] => value
+
+            var q = {
+                1: {
+                    "title": "오늘은 오랜만에 약속이 있는 날!<br>나는 친구를 몇 명이나 만날까?",
+                    "type": "EI",
+                    "A": "많으면 많을수록 좋아!",
+                    "B": "평소 친했던 한두명과 만나!"
+                },
+                2: {
+                    "title": "약속 장소에 나가보니 처음 보는 친구가 있다.<br>말을 걸까?",
+                    "type": "EI",
+                    "A": "먼저 말을 건다.",
+                    "B": "걸지 않는다."
+                },
+                3: {
+                    "title": "친구들과 즐거운 시간을 보내고 있다.<br>나는 어떤 역할일까?",
+                    "type": "EI",
+                    "A": "그 날의 분위기 메이커",
+                    "B": "나는야 셀카쟁이, 인생샷 뽑는다!"
+                },
+                4: {
+                    "title": "친구들과 즐거운 술자리~<br>내가 흥미있어 하는 대화 주제는?",
+                    "type": "SN",
+                    "A": "친구의 패션, 오늘 있었던 뉴스거리",
+                    "B": "서로의 미래 계획, 장기적인 비젼 "
+                },
+                5: {
+                    "title": "앗, 오랜만에 만난 친구의<br>헤어스타일이 달라진거같다! ",
+                    "type": "SN",
+                    "A": "예쁘다, 멋지다고 무한 칭찬!!",
+                    "B": "미안..몰랐어..ㅎㅎ.."
+                },
+                6: {
+                    "title": "와인잔에 담긴 와인을 보고<br>당신은 무슨 이야기를 할까?",
+                    "type": "SN",
+                    "A": "와인의 빛깔, 향기, 와인잔의 형태",
+                    "B": "갑자기 떠오르는 기억..나에게 와인이란.."
+                },
+                7: {
+                    "title": "가게 문을 열고 뛰어들어오는 친구,<br>친구야 약속에 왜 늦었니?<br>듣고 싶은 답은?",
+                    "type": "TF",
+                    "A": "오는 길에 도로에 사고가 나서 늦었어 ㅠㅠ",
+                    "B": "너무 미안해, 오래 기다렸지? ㅠㅠ"
+                },
+                8: {
+                    "title": "친구가 힘든 일이 있었다며<br>계속해서 술을 부어댄다.<br>당신이 해줄 말은?",
+                    "type": "TF",
+                    "A": "너 내일 일정 있다며, 적당히 마셔 ㅠ",
+                    "B": "그래, 힘들었겠다. 마시고 싶은만큼 마셔!!"
+                },
+                9: {
+                    "title": "딱 한 종류의 치즈가 먹고싶어졌다!<br>하지만 여러 치즈가 섞인 플래터 뿐!<br>회비는 제한되어 있다, 당신의 선택은?",
+                    "type": "TF",
+                    "A": "이 메뉴 말고 다른 대안은 없을까?",
+                    "B": "내가 먹고싶은 치즈니까 그냥 시켜!"
+                },
+                10: {
+                    "title": "사실 오늘 저녁 약속은...",
+                    "type": "JP",
+                    "A": "며칠, 아니 몇 주 전부터 잡은 약속",
+                    "B": "오늘 오전에 잡아버린 번개 약속!!"
+                },
+                11: {
+                    "title": "내일까지 제출해야하는 과제가 있는데<br>파티가 너무 재미있다!",
+                    "type": "JP",
+                    "A": "사실 이미 다 해뒀지ㅎㅎ",
+                    "B": "시간 있으니 내일 하지 뭐!"
+                },
+                12: {
+                    "title": "계속 되는 파티파티~<br>이제는 떠나야 할 시간이 되었다",
+                    "type": "JP",
+                    "A": "내일 일정이 있으니 오늘은 이만! 얘들아 안녕!",
+                    "B": "더 재미있는 시간을 놓치면 어떻게하지? 고민된다...나 집에 가?"
+                }
+            }
+            // var q = {     1: {"title": "문제 1번","type": "EI","A": "E","B": "I" },     2:
+            // {"title": "문제 2번","type": "EI","A": "E","B": "I" },     3: {"title": "문제
+            // 3번","type": "EI","A": "E","B": "I" },     4: {"title": "문제 4번","type":
+            // "SN","A": "S","B": "N" },     5: {"title": "문제 5번","type": "SN","A": "S","B":
+            // "N" },     6: {"title": "문제 6번","type": "SN","A": "S","B": "N" },     7:
+            // {"title": "문제 7번","type": "TF","A": "T","B": "F" },     8: {"title": "문제
+            // 8번","type": "TF","A": "T","B": "F" },     9: {"title": "문제 9번","type":
+            // "TF","A": "T","B": "F" },     10: {"title": "문제 10번","type": "JP","A":
+            // "J","B": "P" },     11: {"title": "문제 11번","type": "JP","A": "J","B": "P" },
+            // 12: {"title": "문제 12번","type": "JP","A": "J","B": "P" } }
+            var result = {
+                "ISTJ": {
+                    "grape": "wine1",
+                    "explain": "wine1_ex",
+                    "img": "ISTJ.svg"
+                },
+                "ISFJ": {
+                    "grape": "wine2",
+                    "explain": "wine2_ex",
+                    "img": "ISFJ.svg"
+                },
+                "INFJ": {
+                    "grape": "wine3",
+                    "explain": "wine3_ex",
+                    "img": "INFJ.svg"
+                },
+                "INTJ": {
+                    "grape": "wine4",
+                    "explain": "wine4_ex",
+                    "img": "INTJ.svg"
+                },
+                "ISTP": {
+                    "grape": "wine5",
+                    "explain": "wine5_ex",
+                    "img": "ISTP.svg"
+                },
+                "ISFP": {
+                    "grape": "wine6",
+                    "explain": "wine6_ex",
+                    "img": "ISFP.svg"
+                },
+                "INFP": {
+                    "grape": "wine7",
+                    "explain": "wine7_ex",
+                    "img": "INFP.svg"
+                },
+                "INTP": {
+                    "grape": "wine8",
+                    "explain": "wine8_ex",
+                    "img": "INTP.svg"
+                },
+                "ESTP": {
+                    "grape": "wine9",
+                    "explain": "wine9_ex",
+                    "img": "ESTP.svg"
+                },
+                "ESFP": {
+                    "grape": "wine10",
+                    "explain": "wine10_ex",
+                    "img": "ESFP.svg"
+                },
+                "ENFP": {
+                    "grape": "wine11",
+                    "explain": "wine11_ex",
+                    "img": "ENFP.svg"
+                },
+                "ENTP": {
+                    "grape": "wine12",
+                    "explain": "wine12_ex",
+                    "img": "ENTP.svg"
+                },
+                "ESTJ": {
+                    "grape": "wine13",
+                    "explain": "wine13_ex",
+                    "img": "ESTJ.svg"
+                },
+                "ESFJ": {
+                    "grape": "wine14",
+                    "explain": "wine14_ex",
+                    "img": "ESFJ.svg"
+                },
+                "ENFJ": {
+                    "grape": "wine15",
+                    "explain": "wine15_ex",
+                    "img": "ENFJ.svg"
+                },
+                "ENTJ": {
+                    "grape": "wine16",
+                    "explain": "wine16_ex",
+                    "img": "ENTJ.svg"
+                }
+            }
+
+            function start() {
+                $(".start").hide();
+                $(".question").show();
+                next();
+            }
+
+            $("#A").click(function () {
+                var type = $("#type").val();
+                var preValue = $("#" + type).val();
+                $("#" + type).val(parseInt(preValue) + 1);
+                history += 'A';
+                next();
+            });
+            $("#B").click(function () {
+                history += 'B';
+                next();
+            });
+            $('#Back').click(function () {
+                previous();
+            })
+
+            function next() {
+                if (num == 13) {
+                    $(".question").hide();
+                    $(".result").show();
+                    // 당신에게 어울리는 와인스타일 찾는중...🍷 당신의 유형은...
+                    var mbti = "";
+                    ($("#EI").val() < 2)
+                        ? mbti += "I"
+                        : mbti += "E";
+                    ($("#SN").val() < 2)
+                        ? mbti += "N"
+                        : mbti += "S";
+                    ($("#TF").val() < 2)
+                        ? mbti += "F"
+                        : mbti += "T";
+                    ($("#JP").val() < 2)
+                        ? mbti += "P"
+                        : mbti += "J";
+                    alert(mbti);
+                    $("#img").attr("src", result[mbti]["img"]);
+                    $("#grape").html(result[mbti]["grape"]);
+                    $("#explain").html(result[mbti]["explain"]);
+
+                } else {
+                    $(".progress-bar").attr('style', 'width:calc(100/12*' + num + '%)');
+                    $("#title").html(q[num]["title"]);
+                    $("#type").val(q[num]["type"]);
+                    $("#A").html(q[num]["A"]);
+                    $("#B").html(q[num]["B"]);
+                    num++;
+                }
+
+            }
+
+            function previous() {
+                if (num == 1) {
+                    $(".question").hide();
+                    $(".start").show();
+
+                } else {
+                    $(".progress-bar").attr('style', 'width:calc(100/12*' + (
+                        num - 1
+                    ) + '%)');
+                    $("#title").html(q[num - 1]["title"]);
+                    $("#type").val(q[num - 1]["type"]);
+                    $("#A").html(q[num - 1]["A"]);
+                    $("#B").html(q[num - 1]["B"]);
+                    num--;
+                    if (history[-1] == 'A'){
+                        var type = $("#type").val();
+                        var preValue = $("#" + type).val();
+                        $("#" + type).val(parseInt(preValue) - 1);
+                        history.slice(0,-1);
+                    } else {
+                        history.slice(0,-1);
+                    }
+                }
+            }
+        </script>
+        <!-- Go to www.addthis.com/dashboard to customize your tools -->
+        <script
+            type="text/javascript"
+            src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-6080cf8fb03a64cb"></script>
+
+    </body>
+
+</html>
